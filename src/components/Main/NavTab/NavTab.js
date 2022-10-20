@@ -2,8 +2,8 @@ import './NavTab.css';
 
 export default function NavTab() {
     return (
-        <div className="navtab">
-            <h2 className="navtab__heading">О проекте</h2>
+        <section className="navtab">
+            <h2 className="navtab__type">О проекте</h2>
             <div className="navtab__container">
                 <div className="navtab__description">
                     <div className="navtab__column">
@@ -16,12 +16,12 @@ export default function NavTab() {
                     </div>
                 </div>
                 <div className="navtab__period">
-                    <div className="navtab__period-imagine">1 неделя</div>
-                    <div className="navtab__period-text">Back-end</div>
-                    <div className="navtab__period-imagine">4 недели</div>
-                    <div className="navtab__period-text">Front-end</div>
+                    <div className="navtab__period-imagine-b">1 неделя</div>
+                    <div className="navtab__period-text-b">Back-end</div>
+                    <div className="navtab__period-imagine-f">4 недели</div>
+                    <div className="navtab__period-text-f">Front-end</div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }

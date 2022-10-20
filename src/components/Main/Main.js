@@ -1,12 +1,18 @@
 import './Main.css';
 import Promo from './Promo/Promo';
 import NavTab from './NavTab/NavTab';
+import Techs from "./Techs/Techs";
+import AboutMe from "./AboutMe/AboutMe";
+import Portfolio from "./Portfolio/Portfolio";
 
 export default function Main() {
     return (
-        <div className="main">
+        <main className="main">
             <Promo></Promo>
             <NavTab></NavTab>
-        </div>
+            <Techs></Techs>
+            <AboutMe></AboutMe>
+            <Portfolio></Portfolio>
+        </main>
     )
 }
