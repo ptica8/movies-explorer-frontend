@@ -4,7 +4,6 @@
     box-sizing: border-box;
     justify-content: space-between;
     padding: 18px 70px;
-
 }
 
 .header__logo {
@@ -93,4 +92,29 @@
     background-color: #313131;
     border-radius: 50px;
     padding: 7px 7px;
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 18px 30px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .header {
+        padding: 18px 14px;
+    }
+
+    .header__btn {
+        font-size: 10px;
+    }
+
+    .header__btn-registration {
+        margin-right: 14px;
+    }
+
+    .header__btn-login {
+        min-width: 54px;
+        min-height: 26px;
+    }
 }
