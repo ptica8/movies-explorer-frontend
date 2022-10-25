@@ -16,7 +16,7 @@ export default function AboutMe() {
                         переехала в Сербию.
                     </p>
                     <a
-                        className="social__link"
+                        className="social__link social__link_me"
                         href="https://www.linkedin.com/in/mikshina-v"
                         target="_blank"
                         rel="noreferrer"
