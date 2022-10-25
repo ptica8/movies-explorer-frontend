@@ -2,6 +2,7 @@ import './App.css';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
+import PageNotFound from "../PageNotFound/PageNotFound";
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
 
@@ -34,6 +35,9 @@ function App() {
 
                     <Footer />
                 </>
+            }/>
+            <Route path="/*" element={
+                <PageNotFound />
             }/>
         </Routes>
     </div>

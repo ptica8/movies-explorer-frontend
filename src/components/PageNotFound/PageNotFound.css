@@ -1,0 +1,42 @@
+.pageNotFound {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.pageNotFound__container {
+    flex-direction: column;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.pageNotFound__container-title {
+    font-weight: 400;
+    font-size: 140px;
+    line-height: 169px;
+    margin: 0;;
+}
+
+.pageNotFound__container-description {
+    margin: 5px 0 184px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.pageNotFound__container-link {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    border: none;
+    background-color: inherit;
+    color: #4285F4;
+}
+
+.pageNotFound__container-link:hover {
+    opacity: 0.7;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+}
