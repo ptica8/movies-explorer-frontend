@@ -1,7 +1,9 @@
 import './App.css';
+import Register from "../Register/Register";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
+import Movies from "../Movies/Movies";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
@@ -12,6 +14,12 @@ function App() {
   return (
     <div className="App">
         <Routes>
+            <Route path="/signup" element={
+                <Register
+                    title="Добро пожаловать!"
+                    buttonText="Зарегистрироваться"
+                />
+            }/>
             <Route path="/" element={
                 <>
                     <Header location={location.pathname}>
@@ -29,10 +37,10 @@ function App() {
                         <Link to="/saved-movies" className="header__btn header__btn-saved">Сохраненные фильмы</Link>
                         <Link to="/profile" className="header__btn header__btn-profile">
                             Аккаунт
-                            <img src={icon} className="header__icon-profile"/>
+                            <img src={icon} className="header__icon-profile" alt="Icon"/>
                         </Link>
                     </Header>
-
+                    <Movies />
                     <Footer />
                 </>
             }/>
