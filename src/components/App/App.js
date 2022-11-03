@@ -7,6 +7,7 @@ import Movies from "../Movies/Movies";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
+import React from "react";
 
 function App() {
   const location = useLocation();

@@ -47,6 +47,12 @@
     line-height: 18px;
 }
 
+.searchContainer-btn:hover {
+    opacity: 0.5;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+}
+
 .searchContainer__filter {
     display: flex;
     justify-content: center;
