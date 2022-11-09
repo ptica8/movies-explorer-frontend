@@ -21,6 +21,10 @@
     margin: 0;
 }
 
+.container-btn__hide {
+    display: none;
+}
+
 .moviesCardList__container-btn {
     margin-top: 50px;
     min-width: 320px;

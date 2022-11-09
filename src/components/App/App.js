@@ -8,6 +8,7 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
 import React from "react";
+import SavedMovies from "../SavedMovies/SavedMovies";
 
 function App() {
   const location = useLocation();
@@ -42,6 +43,20 @@ function App() {
                         </Link>
                     </Header>
                     <Movies />
+                    <Footer />
+                </>
+            }/>
+            <Route path="/saved-movies" element={
+                <>
+                    <Header location={location.pathname}>
+                        <Link to="/movies" className="header__btn header__btn-films">Фильмы</Link>
+                        <Link to="/saved-movies" className="header__btn header__btn-saved">Сохраненные фильмы</Link>
+                        <Link to="/profile" className="header__btn header__btn-profile">
+                            Аккаунт
+                            <img src={icon} className="header__icon-profile" alt="Icon"/>
+                        </Link>
+                    </Header>
+                    <SavedMovies/>
                     <Footer />
                 </>
             }/>

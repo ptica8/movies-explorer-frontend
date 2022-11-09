@@ -34,10 +34,10 @@
     margin: 0;
 }
 
-.moviesCard__item-info_like {
-    background-image: url('../../../images/disable-card-like.svg');
+.moviesCard__item-button {
     background-color: transparent;
     background-size: cover;
+    margin: 0;
     border: none;
     background-repeat: no-repeat;
     align-items: center;
@@ -45,7 +45,15 @@
     height: 24px;
 }
 
-.moviesCard__item-info_like:hover {
+.moviesCard__item-button_like {
+    background-image: url('../../../images/disable-card-like.svg');
+}
+
+.moviesCard__item-info_delete {
+    background-image: url('../../../images/close-card-movie.svg');
+}
+
+.moviesCard__item-button:hover {
     opacity: 0.5;
     cursor: pointer;
     transition: ease-out 0.5s;
