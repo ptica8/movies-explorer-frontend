@@ -50,9 +50,7 @@
 }
 
 .social__link:hover {
-    opacity: 0.5;
-    cursor: pointer;
-    transition: ease-out 0.5s;
+
 }
 
 @media screen and (max-width: 768px) {
