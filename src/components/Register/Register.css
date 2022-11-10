@@ -69,7 +69,7 @@
     background-color: #4285F4;
     border-radius: 3px;
     padding: 13px 126px 15px 124px;
-    margin: 134px 0 16px;
+    margin: 69px 0 16px;
     color: #FFFFFF;
     font-weight: 500;
     font-size: 14px;
@@ -91,7 +91,7 @@
 .register__signin_text {
     font-weight: 400;
     color: #8B8B8B;
-    margin-right: 6px;
+    margin: 0 6px 0 0;
 }
 
 .register__signin_link {
@@ -104,5 +104,46 @@
     opacity: 0.5;
     cursor: pointer;
     transition: ease-out 0.5s;
+}
+
+@media screen and (max-width: 768px) {
+    .register__form {
+        max-height: 493px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .register {
+        margin-top: 56px;
+        height: 100%;
+        align-items: center;
+    }
+
+    .register__form {
+        width: 260px;
+        max-height: 656px;
+    }
+
+    .register__title {
+        text-align: center;
+        margin: 50px 0 80px;
+    }
+
+    .form__input-error {
+        margin: 5px 0 7px;
+    }
+
+    .form__button {
+        width: 260px;
+        padding: 15px 0 15px;
+        margin: 157px 0 14px;
+    }
+
+    .register__signin {
+        font-size: 12px;
+        line-height: 15px;
+        max-height: 15px;
+    }
+
 }
 
