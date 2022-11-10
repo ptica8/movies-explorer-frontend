@@ -71,7 +71,10 @@ function App() {
                             <img src={icon} className="header__icon-profile" alt="Icon"/>
                         </Link>
                     </Header>
-                   <Profile />
+                   <Profile
+                        title="Привет, Виталий!"
+                        buttonText="Редактировать"
+                   />
                 </>
             }/>
             <Route path="/*" element={
