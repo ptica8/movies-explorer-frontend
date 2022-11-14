@@ -1,5 +1,6 @@
 import './App.css';
 import Register from "../Register/Register";
+import Login from '../Login/Login';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
@@ -18,16 +19,19 @@ function App() {
     <div className="App">
         <Routes>
             <Route path="/signup" element={
-                <Register
-                    title="Добро пожаловать!"
-                    buttonText="Зарегистрироваться"
+                <Register />
+            }/>
+            <Route path="/signin" element={
+                <Login
+                    title=""
+                    buttonText=""
                 />
             }/>
             <Route path="/" element={
                 <>
                     <Header location={location.pathname}>
-                        <Link to="/" className="header__btn header__btn-registration">Регистрация</Link>
-                        <Link to="/" className="header__btn header__btn-login">Войти</Link>
+                        <Link to="/signup" className="header__btn header__btn-registration">Регистрация</Link>
+                        <Link to="/signin" className="header__btn header__btn-login">Войти</Link>
                     </Header>
                     <Main />
                     <Footer />
@@ -72,7 +76,8 @@ function App() {
                         </Link>
                     </Header>
                    <Profile
-                        title="Привет, Виталий!"
+                        title="Привет"
+                        userName="Виталий"
                         buttonText="Редактировать"
                    />
                 </>

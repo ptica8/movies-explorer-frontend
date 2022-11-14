@@ -29,7 +29,7 @@ export default function Profile(props) {
                 className="profile__form"
                 onSubmit={handleSubmit}
             >
-                <h2 className="profile__title">{props.title}</h2>
+                <h2 className="profile__title">{props.title}, {props.userName}!</h2>
                 <fieldset className="profile__form-set">
                     <div className="profile__form-set_input">
                         <label className="profile__input-label">
