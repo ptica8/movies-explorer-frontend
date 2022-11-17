@@ -17,11 +17,7 @@
     border-top: 1px solid #DADADA;
     padding: 66px 0 0;
     display: flex;
-    justify-content: space-between;
-}
-
-.about-me__container-text {
-    max-width: 600px;
+    gap: 270px;
 }
 
 .about-me__name {
@@ -47,8 +43,15 @@
 }
 
 .about-me__container-photo {
-    max-width: 270px;
+    width: 270px;
+    height: 327px;
     border-radius: 10px;
+}
+
+@media screen and (max-width: 1080px) {
+    .about-me__container {
+        gap: 100px;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -56,8 +59,8 @@
         padding: 90px 50px;
     }
 
-    .about-me__container-text {
-        max-width: 348px;
+    .about-me__container {
+        gap: 49px;
     }
 
     .about-me__name {
@@ -75,12 +78,11 @@
         font-size: 12px;
         line-height: 18px;
         margin: 0 0 87px;
-        padding-right: 49px;
     }
 
     .about-me__container-photo {
-        max-width: 255px;
-        min-height: 307px;
+        width: 255px;
+        height: 307px;
     }
 
     .social__link_me {
@@ -92,12 +94,12 @@
 @media screen and (max-width: 650px) {
     .about-me {
         padding: 70px 14px;
-        width: 100%;
     }
 
     .about-me__container {
         flex-direction: column-reverse;
         padding: 60px 0 0;
+        gap: 0;
     }
 
     .about-me__container-text {
@@ -123,10 +125,13 @@
         line-height: 16px;
         padding: 0;
         margin: 0 0 40px;
+        width: 300px;
     }
 
     .about-me__container-photo {
-        max-width: 100%;
+        width: 292px;
+        height: 352px;
+        align-self: center;
     }
 }
 
@@ -137,11 +142,15 @@
         margin: 0 0 28px;
     }
 
+    .about-me_description {
+        width: 100%;
+    }
+
     .about-me__container-text {
         text-align: left;
     }
 
     .about-me__container-photo {
-        min-height: 352px;
+        width: 100%;
     }
 }

@@ -16,7 +16,7 @@ export default function Portfolio() {
                 </li>
                 <li className="portfolio__list-project">
                     <a className="social__link social__link_portfolio"
-                       href="#"
+                       href="https://ptica8.github.io/russian-travel/"
                        target="_blank"
                        rel="noreferrer">
                         <p className="portfolio__list-project_name">Адаптивный сайт</p>
