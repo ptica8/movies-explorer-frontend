@@ -7,7 +7,7 @@ export default function Portfolio() {
             <ul className="portfolio__list">
                 <li className="portfolio__list-project">
                     <a className="social__link social__link_portfolio"
-                    href="#"
+                    href="https://ptica8.github.io/how-to-learn/"
                     target="_blank"
                     rel="noreferrer">
                         <p className="portfolio__list-project_name">Статичный сайт</p>
@@ -25,7 +25,7 @@ export default function Portfolio() {
                 </li>
                 <li className="portfolio__list-project">
                     <a className="social__link social__link_portfolio"
-                       href="#"
+                       href="https://ptica8.mesto.nomoredomains.sbs/"
                        target="_blank"
                        rel="noreferrer">
                         <p className="portfolio__list-project_name">Одностраничное приложение</p>
