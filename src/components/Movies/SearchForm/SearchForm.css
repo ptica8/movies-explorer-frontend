@@ -1,0 +1,122 @@
+.searchForm {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 70px;
+}
+
+.searchContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin: 80px 0 10px;
+}
+
+.searchContainer__find {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+}
+
+.searchContainer__find-input {
+    width: 100%;
+    padding: 15px 0 15px 22px;
+    margin-right: 10px;
+    border: 0;
+    outline: none;
+    background-color: #2F2F2F;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 129%;
+    color: #FFFFFF;
+    border-radius: 4px;
+}
+
+.searchContainer__find-input:focus {
+    outline: inset thick #3DDC84;
+}
+
+.searchContainer-btn {
+    align-self: center;
+    width: 70px;
+    padding: 13px 5px;
+    background-color: #4285F4;
+    border-radius: 40px;
+    border: none;
+    text-align: center;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.searchContainer-btn:hover {
+    opacity: 0.5;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+}
+
+.searchContainer__filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 31px 0 39px;
+    border-bottom: 1px solid #424242;
+}
+
+.searchContainer__filter-input {
+    background-image: url('../../../images/filter.svg');
+    appearance: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 36px;
+    height: 20px;
+    margin-right: 12px;
+}
+
+.searchContainer__filter-input:checked {
+    background-image: url('../../../images/filter-active.svg');
+}
+
+.searchContainer__filter-name {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 150%;
+    color: #FFFFFF;
+}
+
+@media screen and (max-width: 768px) {
+    .searchForm {
+        padding: 0 30px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .searchForm {
+        padding: 0 14px;
+    }
+
+    .searchContainer__filter {
+        padding: 45px 0 44px;
+    }
+
+    .searchContainer__find-input {
+        padding: 13px 0 13px 16px;
+        font-size: 12px;
+        line-height: 150%;
+    }
+
+    .searchContainer__filter-name {
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 164%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .searchContainer__find-input {
+        width: 212px;
+    }
+}
+

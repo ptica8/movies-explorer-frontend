@@ -1,0 +1,10 @@
+.App {
+  min-height: 100vh;
+  padding: 0;
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+}
