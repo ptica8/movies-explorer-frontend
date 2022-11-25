@@ -1,26 +1,26 @@
 import './AuthorizationForm.css';
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
+import {useFormWithValidation} from '../../useFormWithValidation';
 
-export default function AuthorizationForm(props) {
-    const [data, setData] = useState({
-        name: 'Виталий',
-        email: 'pochta@yandex.ru',
-        password: '12345678',
-    })
+export default function AuthorizationForm({handleRegister, handleLogin, ...props}) {
+    const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
+    const location = useLocation();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let { name, email, password } = data;
-
+    const handleValueChange = (e) => {
+        handleChange(e);
     }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setData((oldData) => ({
-            ...oldData,
-            [name]: value
-        }))
+    const handleSubmitRegister = (e) => {
+        e.preventDefault();
+        const { name, email, password } = values;
+        handleRegister(name, email, password);
+    }
+
+    const handleSubmitLogin = (e) => {
+        e.preventDefault();
+        const { email, password } = values;
+        handleLogin(email, password);
     }
 
     return (
@@ -31,24 +31,33 @@ export default function AuthorizationForm(props) {
                 <form
                     name={`form-${props.nameForm}`}
                     className={`general__form ${props.nameForm}__form`}
-                    onSubmit={handleSubmit}
+                    onSubmit={props.nameForm === 'register' ? handleSubmitRegister : handleSubmitLogin}
+                    action="#"
                 >
                     <div className="form__form-set">
-                        <label className={`form__input-label ${props.nameForm === 'register' ? '' : 'form__hide'}`}>
-                            Имя
-                        </label>
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            className={`form__input form__input_type_${props.nameForm} form__input-name ${props.nameForm === 'register' ? '' : 'form__hide'}`}
-                            minLength={2}
-                            required=""
-                            placeholder="Имя"
-                            value={data.name}
-                            onChange={handleChange}
-                        />
-                        <span className={`form__input-error input-name-error ${props.nameForm === 'register' ? '' : 'form__hide'}`}>Введите имя</span>
+                        { location.pathname === '/signup' ? (
+                            <>
+                                <label className="form__input-label">
+                                    Имя
+                                </label>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    className={`form__input form__input_type_${props.nameForm} form__input-name`}
+                                    minLength={2}
+                                    maxLength={30}
+                                    pattern="[а-яА-ЯёЁa-zA-Z0-9\- ]{1,}"
+                                    required
+                                    placeholder="Имя"
+                                    value={values.name}
+                                    onChange={handleValueChange}
+                                    autoComplete="name"
+                                />
+                                <span className="form__input-error input-name-error">{errors.name || ''}</span>
+                            </>
+                            ) : ''
+                        }
                         <label className="form__input-label">
                             Email
                         </label>
@@ -57,13 +66,14 @@ export default function AuthorizationForm(props) {
                             name="email"
                             type="email"
                             className={`form__input form__input_type_${props.nameForm} form__input-email`}
-                            minLength={2}
+                            pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
                             required
                             placeholder="Email"
-                            value={data.email}
-                            onChange={handleChange}
+                            value={values.email}
+                            onChange={handleValueChange}
+                            autoComplete="email"
                         />
-                        <span className="form__input-error input-email-error">Введите Email</span>
+                        <span className="form__input-error input-email-error">{errors.email || ''}</span>
                         <label className="form__input-label">
                             Пароль
                         </label>
@@ -71,17 +81,18 @@ export default function AuthorizationForm(props) {
                             id="password"
                             name="password"
                             type="password"
-                            className={`form__input form__input_type_${props.nameForm} form__input-error_active`}
+                            className={`form__input form__input_type_${props.nameForm}`}
                             required
                             placeholder="Пароль"
                             minLength={2}
-                            value={`${props.nameForm === 'register' ? data.password : ''}`}
-                            onChange={handleChange}
+                            value={values.password}
+                            onChange={handleValueChange}
+                            autoComplete="current-password"
                         />
-                        <span className={`form__input-error input-password-error ${props.nameForm === 'register' ? 'form__input-error_active' : 'form__hide'}`}>Что-то пошло не так...</span>
+                        <span className={`form__input-error input-password-error`}>{errors.password || ''}</span>
                     </div>
                     <div>
-                        <button type="submit" onSubmit={handleSubmit} className={`form__button form__button_type_${props.nameForm}`}>
+                        <button type="submit" className={`form__button form__button_type_${props.nameForm}`} disabled={ !isValid }>
                             {props.buttonText}
                         </button>
                         <div className={`general__signin ${props.nameForm}__signin`}>

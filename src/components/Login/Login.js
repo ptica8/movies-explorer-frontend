@@ -1,7 +1,7 @@
 import './Login.css';
 import AuthorizationForm from "../AuthorizationForm/AuthorizationForm";
 
-export default function Login() {
+export default function Login({handleSubmitLogin, handleLogin}) {
     return (
         <section className="login">
             <AuthorizationForm
@@ -11,6 +11,8 @@ export default function Login() {
                 linkText="Ещё не зарегистрированы?"
                 link="/signup"
                 linkName="Регистрация"
+                handleLogin={handleLogin}
+                onSubmit={handleSubmitLogin}
             />
         </section>
     )

@@ -71,6 +71,8 @@
     color: #EE3465;
     text-decoration: none;
     margin-top: 16px;
+    background-color: inherit;
+    border: none;
 }
 
 .profile__edit_button:hover, .profile__edit_exit:hover {

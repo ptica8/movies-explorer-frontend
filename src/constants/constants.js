@@ -1,0 +1,1 @@
+export const mainApiLink = 'http://localhost:3000';

@@ -1,7 +1,7 @@
 import AuthorizationForm from "../AuthorizationForm/AuthorizationForm";
 import './Register.css';
 
-export default function Register() {
+export default function Register({handleSubmitRegister, handleRegister}) {
     return (
         <section className="register">
             <AuthorizationForm
@@ -11,6 +11,8 @@ export default function Register() {
                 linkText="Уже зарегистрированы?"
                 link="/signin"
                 linkName="Войти"
+                handleRegister={handleRegister}
+                onSubmit={handleSubmitRegister}
             />
         </section>
     )
