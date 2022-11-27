@@ -1,4 +1,3 @@
-import {Link} from "react-router-dom";
 import React, {useContext, useState, useEffect} from "react";
 import './Profile.css'
 import {CurrentUserContext} from '../../context/CurrentUserContext';
@@ -7,7 +6,7 @@ export default function Profile(props) {
     const currentUser = useContext(CurrentUserContext);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-
+    const [onEdit, setOnEdit] = useState(false);
 
     useEffect(() => {
         setName(currentUser.name);
@@ -23,10 +22,20 @@ export default function Profile(props) {
 
     const handleNameChange = (e) => {
         setName(e.target.value);
+        if (e.target.value === currentUser.name) {
+            setOnEdit(false);
+        } else {
+            setOnEdit(true)
+        }
     }
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
+        if (e.target.value === currentUser.email) {
+            setOnEdit(false);
+        } else {
+            setOnEdit(true)
+        }
     }
 
     return (
@@ -74,8 +83,8 @@ export default function Profile(props) {
                     </div>
                 </fieldset>
                 <div className="profile__edit">
-                    <button type="submit" className="profile__edit_button" onSubmit={handleSubmit}>
-                        {props.buttonText}
+                    <button type="submit" className="profile__edit_button" onSubmit={handleSubmit} disabled={!onEdit}>
+                        Редактировать
                     </button>
                     <button type="button" className="profile__edit_exit" onClick={props.onLogOut}>Выйти из аккаунта</button>
                 </div>

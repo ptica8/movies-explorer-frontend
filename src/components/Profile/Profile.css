@@ -81,6 +81,11 @@
     transition: ease-out 0.5s;
 }
 
+.profile__edit_button:disabled {
+    opacity: 1;
+    color: #8B8B8B;
+}
+
 @media screen and (max-width: 450px) {
     .profile {
         width: 260px;

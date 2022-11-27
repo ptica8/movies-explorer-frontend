@@ -6,12 +6,13 @@ import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import PageNotFound from "../PageNotFound/PageNotFound";
-import {Route, Routes, Link, useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, Link, useLocation, useNavigate, Navigate} from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
 import {useState, useEffect} from "react";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import Navigation from "../Navigation/Navigation";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import {mainApi} from '../../utils/MainApi';
 
@@ -53,7 +54,10 @@ function App() {
                     setCurrentUser({name: res.name, email: res.email, _id: res._id})
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                setLoggedIn(false);
+            });
         }
   }
 
@@ -74,6 +78,7 @@ function App() {
               if (res.token) {
                   localStorage.setItem('token', res.token);
                   setLoggedIn(true);
+                  setSuccess(true);
                   navigate('/movies');
               }
           })
@@ -96,13 +101,13 @@ function App() {
   }
 
   function handleLogOut() {
+      setLoggedIn(false);
       localStorage.removeItem('token');
       setUserData({
          username: '',
          email: '',
       });
-      setLoggedIn(false);
-      navigate('/signin');
+      navigate('/');
   }
 
   return (
@@ -139,8 +144,16 @@ function App() {
                                 <img src={icon} className="header__icon-profile" alt="Icon"/>
                             </Link>
                         </Header>
-                        <Navigation isOpen={isOpen} onClose={handlePopupCloseClick} />
-                        <Movies />
+                        <ProtectedRoute
+                            path="/movies"
+                            component={Navigation}
+                            isOpen={isOpen}
+                            onClose={handlePopupCloseClick}
+                        />
+                        <ProtectedRoute
+                            path="/movies"
+                            component={Movies}
+                        />
                         <Footer />
                     </>
                 }/>
@@ -154,8 +167,16 @@ function App() {
                                 <img src={icon} className="header__icon-profile" alt="Icon"/>
                             </Link>
                         </Header>
-                        <Navigation isOpen={isOpen} onClose={handlePopupCloseClick} />
-                        <SavedMovies/>
+                        <ProtectedRoute
+                            path="/saved-movies"
+                            component={Navigation}
+                            isOpen={isOpen}
+                            onClose={handlePopupCloseClick}
+                        />
+                        <ProtectedRoute
+                            path="/saved-movies"
+                            component={SavedMovies}
+                        />
                         <Footer />
                     </>
                 }/>
@@ -169,17 +190,26 @@ function App() {
                                 <img src={icon} className="header__icon-profile" alt="Icon"/>
                             </Link>
                         </Header>
-                        <Navigation isOpen={isOpen} onClose={handlePopupCloseClick} />
-                       <Profile
+                        <ProtectedRoute
+                            path="/profile"
+                            component={Navigation}
+                            isOpen={isOpen}
+                            onClose={handlePopupCloseClick}
+                        />
+                        <ProtectedRoute
+                            path="/profile"
+                            component={Profile}
                             title="Привет"
-                            buttonText="Редактировать"
                             onUpdateUser={handleUpdateUser}
                             onLogOut={handleLogOut}
-                       />
+                        />
                     </>
                 }/>
                 <Route path="/*" element={
                     <PageNotFound />
+                }/>
+                <Route exact path="/" element={
+                    loggedIn ? (<Navigate to="/movies" />) : (<Navigate to="/"/>)
                 }/>
             </Routes>
         </div>

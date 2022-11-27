@@ -19,10 +19,10 @@ import pic14 from '../../images/pic-14.jpg';
 import pic15 from '../../images/pic-15.jpg';
 import pic16 from '../../images/pic-16.jpg';
 
-export default function Movies(loggedIn) {
+export default function Movies() {
     return (
         <section className="movies">
-            <SearchForm loggedIn={loggedIn}/>
+            <SearchForm/>
             <MoviesCardList>
                 <MoviesCard
                     img={pic1}
