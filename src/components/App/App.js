@@ -15,6 +15,7 @@ import Navigation from "../Navigation/Navigation";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import {mainApi} from '../../utils/MainApi';
+import {MoviesApi} from '../../utils/MoviesApi';
 
 function App() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
       username: '',
       email: ''
   });
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   const handlePopupOpenClick = () => {
@@ -115,14 +117,10 @@ function App() {
           <div className="App">
             <Routes>
                 <Route path="/signup" element={
-                    <Register
-                        handleRegister={handleRegister}
-                    />
+                    !loggedIn ? <Register handleRegister={handleRegister} /> : <Navigate to='/movies' replace />
                 }/>
                 <Route path="/signin" element={
-                    <Login
-                        handleLogin={handleLogin}
-                    />
+                    !loggedIn ? <Login handleLogin={handleLogin} /> : <Navigate to='/movies' replace />
                 }/>
                 <Route path="/" element={
                     <>
@@ -209,7 +207,7 @@ function App() {
                     <PageNotFound />
                 }/>
                 <Route exact path="/" element={
-                    loggedIn ? (<Navigate to="/movies" />) : (<Navigate to="/"/>)
+                    loggedIn ? (<Navigate to="/movies" replace />) : (<Navigate to="/" replace />)
                 }/>
             </Routes>
         </div>
