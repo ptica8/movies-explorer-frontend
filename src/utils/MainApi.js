@@ -56,6 +56,42 @@ class Api {
         })
             .then(checkResponse)
     }
+
+    getAllMovies(token) {
+        return fetch(`${this._url}/movies`, {
+            method: 'GET',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(checkResponse)
+    }
+
+    addLikeToMovieSaved(token, movie) {
+        return fetch(`${this._url}/movies`, {
+            method: 'POST',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(movie)
+        })
+            .then(checkResponse)
+    }
+
+    deleteMovie(movieId, token) {
+        return fetch(`${this._url}/movies/${movieId}`, {
+            method: 'DELETE',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(checkResponse)
+    }
+
+
 }
 
 export const mainApi = new Api({

@@ -15,7 +15,7 @@ import Navigation from "../Navigation/Navigation";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import {mainApi} from '../../utils/MainApi';
-import {MoviesApi} from '../../utils/MoviesApi';
+import MoviesApi from '../../utils/MoviesApi';
 
 function App() {
   const location = useLocation();
@@ -28,6 +28,8 @@ function App() {
       email: ''
   });
   const [movies, setMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handlePopupOpenClick = () => {
@@ -40,6 +42,17 @@ function App() {
 
   useEffect(() => {
         handleTokenCheck();
+  }, [loggedIn])
+
+  useEffect(() => {
+      let jwt = localStorage.getItem('token');
+      if (loggedIn === true) {
+          mainApi.getAllMovies(jwt)
+              .then((moviesList) => {
+                  setMovies(moviesList)
+              })
+              .catch(err => console.log(err))
+      }
   }, [loggedIn])
 
   function handleTokenCheck() {
@@ -92,12 +105,14 @@ function App() {
 
   function handleUpdateUser(data) {
       let jwt = localStorage.getItem('token');
+      setIsLoading(true);
       mainApi.editProfileInfo(data, jwt)
           .then(() => {
               setCurrentUser({
                   name: data.name,
                   email: data.email,
               })
+              setIsLoading(false);
           })
           .catch(err => console.log(err))
   }
@@ -110,6 +125,46 @@ function App() {
          email: '',
       });
       navigate('/');
+  }
+
+  function handleGetMovieList(input) {
+      MoviesApi()
+          .then((movies) => {
+              setMovies(movies.filter(movie => {
+                  const lowerCaseInput = input?.toLowerCase();
+                  return movie.nameRU?.toLowerCase().includes(lowerCaseInput) || movie.nameEN?.toLowerCase().includes(lowerCaseInput);
+              }));
+              setIsLoading(false);
+          })
+          .catch(err => console.log(err));
+  }
+
+  function handleMovieDelete(movie) {
+      let jwt = localStorage.getItem('token');
+      mainApi.deleteMovie(movie.id, jwt)
+          .then(() => {
+              const newMovieList = savedMovies.filter((c) => c._id === movie.id ? '' : c);
+              setSavedMovies(newMovieList);
+              localStorage.setItem('savedMovies', JSON.stringify(newMovieList))
+          })
+          .catch(err => console.log(err))
+  }
+
+  function handleMovieLikeToSaved(movie) {
+      let jwt = localStorage.getItem('token');
+      mainApi.addLikeToMovieSaved(jwt, movie)
+          .then((savedMovie) => {
+              const newMovieList = [...savedMovies, {...savedMovie, id: savedMovie.movieId}]
+              console.log('newMovieList:', newMovieList)
+              setSavedMovies(newMovieList);
+              localStorage.setItem('savedMovies', JSON.stringify(newMovieList));
+              setIsLoading(false);
+          })
+          .catch(err => console.log(err))
+  }
+
+  function handleMovieClick(movie) {
+
   }
 
   return (
@@ -151,6 +206,15 @@ function App() {
                         <ProtectedRoute
                             path="/movies"
                             component={Movies}
+                            moviesList={movies}
+                            savedMovies={savedMovies}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
+                            onMovieLike={handleMovieLikeToSaved}
+                            onMovieDelete={handleMovieDelete}
+                            onMovieCLick={handleMovieClick}
+                            getMovieList={handleGetMovieList}
+                            location={location}
                         />
                         <Footer />
                     </>
@@ -174,6 +238,8 @@ function App() {
                         <ProtectedRoute
                             path="/saved-movies"
                             component={SavedMovies}
+                            savedMoviesList={savedMovies}
+                            isLoading={isLoading}
                         />
                         <Footer />
                     </>

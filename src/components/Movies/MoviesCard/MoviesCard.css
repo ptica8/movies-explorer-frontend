@@ -45,7 +45,11 @@
     height: 24px;
 }
 
-.moviesCard__item-button_like {
+.moviesCard__item-button_like-active {
+    background-image: url('../../../images/active-card-like.svg');
+}
+
+.moviesCard__item-button_like-disable {
     background-image: url('../../../images/disable-card-like.svg');
 }
 
