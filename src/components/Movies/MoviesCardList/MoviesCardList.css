@@ -12,6 +12,14 @@
     width: 100%;
 }
 
+.moviesCardList__container_text {
+    text-align: center;
+    color: #8B8B8B;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 16px;
+}
+
 .moviesCardList__container-catalog {
     list-style-type: none;
     display: grid;
@@ -20,6 +28,7 @@
     padding: 0;
     margin: 0;
 }
+
 
 .container-btn__hide {
     display: none;
