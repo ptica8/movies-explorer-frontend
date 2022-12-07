@@ -31,7 +31,6 @@ function App() {
 	const [hasError, setHasError] = useState(false)
 	const [isShortMovie, setIsShortMovie] = useState(localStorage.getItem('isShortMovie') === 'true');
 	const navigate = useNavigate();
-
 	const handlePopupOpenClick = () => {
 		setIsOpen(true);
 	}
@@ -44,22 +43,11 @@ function App() {
 		handleTokenCheck();
 	}, [loggedIn])
 
-	// useEffect(() => {
-	// 	let jwt = localStorage.getItem('token');
-	// 	if (loggedIn === true) {
-	// 		mainApi.getAllMovies(jwt)
-	// 			.then((res) => {
-	// 				setMovies(res);
-	// 			})
-	// 			.catch(err => console.log(err))
-	// 	}
-	// }, [loggedIn])
-
 	useEffect(() => {
 		if (location.pathname === '/movies') {
-			setFilteredMovies(filterMovies(movies))
+			localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
 		}
-	}, [isShortMovie, input])
+	}, [filteredMovies])
 
 	function handleTokenCheck() {
 		let jwt = localStorage.getItem('token');
@@ -121,6 +109,7 @@ function App() {
 		setLoggedIn(false);
 		localStorage.removeItem('token');
 		localStorage.removeItem('filteredMovies');
+		localStorage.removeItem('savedMovies');
 		setCurrentUser({name: '', email: '', _id: ''})
 		navigate('/');
 	}
@@ -149,36 +138,42 @@ function App() {
 				setHasError(true);
 				console.log(err)
 			});
-		localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
 	}
 
-	function handleMovieDelete(movie) {
+	function handleGetSavedMovies() {
 		let jwt = localStorage.getItem('token');
-		mainApi.deleteMovie(movie.id, jwt)
-			.then(() => {
-				const newMovieList = savedMovies.filter((c) => c._id === movie.id ? '' : c);
-				setSavedMovies(newMovieList);
-				localStorage.setItem('savedMovies', JSON.stringify(newMovieList))
+		mainApi.getSavedMovies(jwt)
+			.then((res) => {
+				setSavedMovies(res)
+				localStorage.setItem('savedMovies', JSON.stringify(savedMovies))
 			})
 			.catch(err => console.log(err))
 	}
 
 	function handleMovieLikeToSaved(movie) {
-		let jwt = localStorage.getItem('token');
-		mainApi.addLikeToMovieSaved(jwt, movie)
-			.then((savedMovie) => {
-				const newMovieList = [...savedMovies, {...savedMovie, id: savedMovie.movieId}]
+		const jwt = localStorage.getItem('token');
+		mainApi.addLikeToMovieSaved(jwt, movie, currentUser)
+			.then((res) => {
+				const newMovieList = [...savedMovies, {...res.data, id: res.data.movieId}]
 				setSavedMovies(newMovieList);
 				localStorage.setItem('savedMovies', JSON.stringify(newMovieList));
-				setIsLoading(false);
 			})
 			.catch(err => console.log(err))
 	}
 
-	function handleMovieClick(movie) {
-
+	function handleMovieLikeRemove(movie) {
+		const jwt = localStorage.getItem('token');
+		const savedMovieId = savedMovies.find(({movieId}) => movieId === movie.movieId || movie.id)?._id
+		console.log('savedMovies:', savedMovies)
+		console.log('movie:', movie)
+		mainApi.deleteMovie(jwt, savedMovieId, currentUser)
+			.then((res) => {
+				const newMovieList = savedMovies.filter((savedMovie) => savedMovie._id !== savedMovieId);
+				setSavedMovies(newMovieList);
+				localStorage.setItem('savedMovies', JSON.stringify(newMovieList));
+			})
+			.catch(err => console.log(err))
 	}
-
 
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
@@ -228,12 +223,12 @@ function App() {
 								setInput={setInput}
 								hasError={hasError}
 								onMovieLike={handleMovieLikeToSaved}
-								onMovieDelete={handleMovieDelete}
-								onMovieCLick={handleMovieClick}
+								onMovieLikeRemove={handleMovieLikeRemove}
 								getMovieList={handleGetMovieList}
 								location={location}
 								isShortMovie={isShortMovie}
 								setIsShortMovie={setIsShortMovie}
+								setFilteredMovies={setFilteredMovies}
 							/>
 							<Footer/>
 						</>
@@ -258,8 +253,18 @@ function App() {
 							<ProtectedRoute
 								path="/saved-movies"
 								component={SavedMovies}
-								savedMoviesList={savedMovies}
+								savedMovies={savedMovies}
 								isLoading={isLoading}
+								getSavedMovieList={handleGetSavedMovies}
+								onMovieDelete={handleMovieLikeRemove}
+								filteredMovies={filteredMovies}
+								setIsLoading={setIsLoading}
+								input={input}
+								setInput={setInput}
+								location={location}
+								isShortMovie={isShortMovie}
+								setIsShortMovie={setIsShortMovie}
+								setFilteredMovies={setFilteredMovies}
 							/>
 							<Footer/>
 						</>

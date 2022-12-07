@@ -7,8 +7,10 @@ export default function SearchForm(props) {
 	function handleSubmit(e) {
 		e.preventDefault();
 		if (props.location.pathname === '/movies') {
-			props.totalQuantityWindowWidth();
 			props.getMovieList(props.input);
+			props.totalQuantityWindowWidth();
+		} else {
+			props.getSavedMovieList(props.input);
 		}
 	}
 

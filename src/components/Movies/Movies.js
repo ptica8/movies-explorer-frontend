@@ -8,7 +8,6 @@ import {CurrentUserContext} from "../../context/CurrentUserContext";
 export default function Movies(props) {
 	const currentUser = useContext(CurrentUserContext);
 	const [isLoading, setIsLoading] = useState(false);
-	const isLiked = props.savedMovies.some(i => i === currentUser._id) || false;
 	const [displayedCards, setDisplayedCards] = useState(0);
 	const [cardsInRow, setCardsInRow] = useState(0);
 
@@ -24,6 +23,17 @@ export default function Movies(props) {
 			setCardsInRow(1)
 		}
 	}
+
+	window.addEventListener('resize', () => {
+		let timeout;
+		clearTimeout(timeout)
+		timeout = setTimeout(totalQuantityWindowWidth, 2000)
+	})
+
+	useEffect(() => {
+		totalQuantityWindowWidth()
+	}, [])
+
 
 	return (
 		<section className="movies">
@@ -53,9 +63,10 @@ export default function Movies(props) {
 						time={movie.duration}
 						trailerLink={movie.trailerLink}
 						movie={movie}
+						savedMovies={props.savedMovies}
 						onMovieLike={props.onMovieLike}
-						onClick={props.onMovieCLick}
-						isLiked={isLiked}
+						onMovieLikeRemove={props.onMovieLikeRemove}
+						onMovieDelete={props.onMovieDelete}
 					/>
 				))}
 			</MoviesCardList>
