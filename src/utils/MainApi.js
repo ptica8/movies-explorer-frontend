@@ -1,4 +1,4 @@
-import {mainApiLink, apiLink} from '../constants/constants';
+import {apiLink, mainApiLink} from '../constants/constants';
 
 export const checkResponse = (res) => {
 	if (res.ok) {

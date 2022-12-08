@@ -24,7 +24,7 @@ export default function SearchForm(props) {
 
 	function handleCheckboxChange(e) {
 		props.setIsShortMovie(e.target.checked);
-		props.onCheckboxChange();
+		props.onCheckboxChange(e.target.checked);
 	}
 
 	return (
