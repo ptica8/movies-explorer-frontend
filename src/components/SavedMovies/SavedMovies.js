@@ -4,12 +4,9 @@ import SavedMoviesCardList from "./SavedMoviesCardList/SavedMoviesCardList";
 import {useEffect} from "react";
 
 export default function SavedMovies(props) {
-
 	useEffect(() => {
 		props.getSavedMovieList()
 	}, [])
-
-	console.log('props.savedMovies:', props.savedMovies)
 
 	return (
 		<section className="movies">
@@ -21,6 +18,7 @@ export default function SavedMovies(props) {
 				isShortMovie={props.isShortMovie}
 				setIsShortMovie={props.setIsShortMovie}
 				getSavedMovieList={props.getSavedMovieList}
+				onCheckboxChange={props.onCheckboxChange}
 			/>
 			<SavedMoviesCardList
 				getSavedMovieList={props.getSavedMovieList}

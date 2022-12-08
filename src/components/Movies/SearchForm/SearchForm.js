@@ -1,16 +1,20 @@
 import './SearchForm.css';
 import {useLocation} from "react-router-dom";
+import {useState} from "react";
 
 export default function SearchForm(props) {
 	const location = useLocation();
+	const [emptySearchFinder, setEmptySearchFinder] = useState('')
 
 	function handleSubmit(e) {
 		e.preventDefault();
 		if (props.location.pathname === '/movies') {
 			props.getMovieList(props.input);
 			props.totalQuantityWindowWidth();
+		} else if (props.location.pathname === '/saved-movies') {
+			props.getSavedMovieList();
 		} else {
-			props.getSavedMovieList(props.input);
+			setEmptySearchFinder('Нужно ввести ключевое слово')
 		}
 	}
 
@@ -18,18 +22,17 @@ export default function SearchForm(props) {
 		props.setInput(e.target.value);
 	}
 
-	function handleCheckboxChange({target: {checked}}) {
-		props.setIsShortMovie(checked);
-		if (location.pathname === '/movies') {
-			localStorage.setItem('isShortMovie', checked)
-		}
+	function handleCheckboxChange(e) {
+		props.setIsShortMovie(e.target.checked);
+		props.onCheckboxChange();
 	}
 
 	return (
 		<section className="searchForm">
 			<div className="searchContainer">
 				<form className="searchContainer__find" onSubmit={handleSubmit}>
-					<input className="searchContainer__find-input" type="text" required placeholder="Фильм"
+					<input className="searchContainer__find-input" type="text" required
+						   placeholder={emptySearchFinder ? emptySearchFinder : 'Фильм'}
 						   minLength="1" onChange={handleInputChange}></input>
 					<button className="searchContainer-btn" type="submit" onSubmit={handleSubmit}>Найти</button>
 				</form>

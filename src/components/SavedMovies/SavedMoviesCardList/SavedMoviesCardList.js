@@ -11,13 +11,12 @@ export default function SavedMoviesCardList(props) {
 			cardsInRow={props.cardsInRow}
 			filteredMovies={props.filteredMovies}
 			getSavedMovieList={props.getSavedMovieList}
-
 		>
 			{props.savedMovies.map((movie) => (
 				<MoviesCard
-					imageUrl={movie.image.url}
+					imageUrl={movie.image}
 					nameRu={movie.nameRU}
-					key={movie.id}
+					key={movie.movieId}
 					time={movie.duration}
 					trailerLink={movie.trailerLink}
 					movie={movie}

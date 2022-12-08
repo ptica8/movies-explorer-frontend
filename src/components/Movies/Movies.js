@@ -3,6 +3,7 @@ import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import MoviesCard from "./MoviesCard/MoviesCard";
 import {useContext, useEffect, useState} from "react";
+import {apiLink} from "../../constants/constants";
 import {CurrentUserContext} from "../../context/CurrentUserContext";
 
 export default function Movies(props) {
@@ -34,7 +35,6 @@ export default function Movies(props) {
 		totalQuantityWindowWidth()
 	}, [])
 
-
 	return (
 		<section className="movies">
 			<SearchForm
@@ -46,6 +46,7 @@ export default function Movies(props) {
 				setInput={props.setInput}
 				isShortMovie={props.isShortMovie}
 				setIsShortMovie={props.setIsShortMovie}
+				onCheckboxChange={props.onCheckboxChange}
 			/>
 			<MoviesCardList
 				isLoading={props.isLoading}
@@ -57,7 +58,7 @@ export default function Movies(props) {
 			>
 				{props.filteredMovies.slice(0, displayedCards).map((movie) => (
 					<MoviesCard
-						imageUrl={movie.image.url}
+						imageUrl={`${apiLink + movie.image.url}`}
 						nameRu={movie.nameRU}
 						key={movie.id}
 						time={movie.duration}

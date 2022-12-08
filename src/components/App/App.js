@@ -26,15 +26,15 @@ function App() {
 	const [movies, setMovies] = useState([]);
 	const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
 	const [successIn, setSuccess] = useState(false);
-	const [savedMovies, setSavedMovies] = useState([]);
+	const [savedMovies, setSavedMovies] = useState(JSON.parse(localStorage.getItem('savedMovies')) || []);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasError, setHasError] = useState(false)
-	const [isShortMovie, setIsShortMovie] = useState(localStorage.getItem('isShortMovie') === 'true');
+	const [isShortMovie, setIsShortMovie] = useState(false);
 	const navigate = useNavigate();
+
 	const handlePopupOpenClick = () => {
 		setIsOpen(true);
 	}
-
 	const handlePopupCloseClick = () => {
 		setIsOpen(false);
 	}
@@ -118,11 +118,20 @@ function App() {
 		const lowerCaseInput = input?.toLowerCase();
 		return movie.nameRU?.toLowerCase().includes(lowerCaseInput) || movie.nameEN?.toLowerCase().includes(lowerCaseInput);
 	}
-	const filterOnShortMovieCheckbox = (movie) => {
-		if (isShortMovie) return movie.duration <= 40;
-		return true;
+	const filterOnShortMovieCheckbox = (movie, checkedStatus) => {
+		return checkedStatus ? movie.duration <= 40 : true;
 	}
-	const filterMovies = (movies) => movies.filter(movie => filterOnInput(movie, input) && filterOnShortMovieCheckbox(movie));
+	const filterMovies = (movies) => {
+		return movies.filter(movie => filterOnInput(movie, input) && filterOnShortMovieCheckbox(movie, isShortMovie))
+	};
+
+	function onCheckboxChange() {
+		if (location.pathname === '/movies') {
+			setFilteredMovies(filterMovies(movies));
+		} else if (location.pathname === '/saved-movies') {
+			setSavedMovies(filterMovies(movies))
+		}
+	}
 
 	function handleGetMovieList(input) {
 		setIsLoading(true);
@@ -144,7 +153,7 @@ function App() {
 		let jwt = localStorage.getItem('token');
 		mainApi.getSavedMovies(jwt)
 			.then((res) => {
-				setSavedMovies(res)
+				setSavedMovies(filterMovies(res))
 				localStorage.setItem('savedMovies', JSON.stringify(savedMovies))
 			})
 			.catch(err => console.log(err))
@@ -161,14 +170,13 @@ function App() {
 			.catch(err => console.log(err))
 	}
 
-	function handleMovieLikeRemove(movie) {
+	function handleMovieLikeRemove(savedMovieId) {
 		const jwt = localStorage.getItem('token');
-		const savedMovieId = savedMovies.find(({movieId}) => movieId === movie.movieId || movie.id)?._id
-		console.log('savedMovies:', savedMovies)
-		console.log('movie:', movie)
 		mainApi.deleteMovie(jwt, savedMovieId, currentUser)
-			.then((res) => {
-				const newMovieList = savedMovies.filter((savedMovie) => savedMovie._id !== savedMovieId);
+			.then(() => {
+				const newMovieList = savedMovies.filter((savedMovie) => {
+					return savedMovie._id !== savedMovieId
+				});
 				setSavedMovies(newMovieList);
 				localStorage.setItem('savedMovies', JSON.stringify(newMovieList));
 			})
@@ -181,7 +189,7 @@ function App() {
 				<Routes>
 					<Route path="/signup" element={
 						!loggedIn ? <Register handleRegister={handleRegister}/> : <Navigate to='/movies' replace/>
-					}/>
+					}/>,,
 					<Route path="/signin" element={
 						!loggedIn ? <Login handleLogin={handleLogin}/> : <Navigate to='/movies' replace/>
 					}/>
@@ -229,6 +237,7 @@ function App() {
 								isShortMovie={isShortMovie}
 								setIsShortMovie={setIsShortMovie}
 								setFilteredMovies={setFilteredMovies}
+								onCheckboxChange={onCheckboxChange}
 							/>
 							<Footer/>
 						</>
@@ -265,6 +274,7 @@ function App() {
 								isShortMovie={isShortMovie}
 								setIsShortMovie={setIsShortMovie}
 								setFilteredMovies={setFilteredMovies}
+								onCheckboxChange={onCheckboxChange}
 							/>
 							<Footer/>
 						</>
