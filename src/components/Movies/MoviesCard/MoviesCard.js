@@ -24,7 +24,7 @@ export default function MoviesCard(props) {
 	return (
 		<section className="moviesCard">
 			<li className="moviesCard__item">
-				<a href={props.trailerLink} target="_blank" rel="noreferrer">
+				<a href={props.trailerLink} target="_blank" rel="noreferrer" className="moviesCard__item_link">
 					<img src={props.imageUrl} className="moviesCard__item_pic" alt={props.nameRu}/>
 				</a>
 				<div className="moviesCard__item-info">

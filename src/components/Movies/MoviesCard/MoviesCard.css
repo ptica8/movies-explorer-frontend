@@ -5,8 +5,14 @@
     flex-direction: column;
 }
 
+.moviesCard__item_link {
+    display: flex;
+    justify-content: center;
+}
+
 .moviesCard__item_pic {
     max-width: 100%;
+    height: 151px;
 }
 
 .moviesCard__item_pic:hover {
@@ -72,9 +78,19 @@
     margin: 0;
 }
 
+@media screen and (max-width: 768px) {
+    .moviesCard__item_pic {
+        height: 190px;
+    }
+}
+
 @media screen and (max-width: 350px) {
     .moviesCard__item {
         padding: 0 10px;
+    }
+
+    .moviesCard__item_pic {
+        height: 168px;
     }
 
     .moviesCard__item-info_title {

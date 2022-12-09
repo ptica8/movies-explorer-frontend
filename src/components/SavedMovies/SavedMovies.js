@@ -22,7 +22,7 @@ export default function SavedMovies(props) {
 			/>
 			<SavedMoviesCardList
 				getSavedMovieList={props.getSavedMovieList}
-				filteredMovies={props.filteredMovies}
+				filteredSavedMovies={props.filteredSavedMovies}
 				displayedCards={props.displayedCards}
 				setDisplayedCards={props.setDisplayedCards}
 				cardsInRow={props.cardsInRow}

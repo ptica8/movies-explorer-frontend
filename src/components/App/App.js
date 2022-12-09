@@ -8,7 +8,7 @@ import Movies from "../Movies/Movies";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import {Route, Routes, Link, useLocation, useNavigate, Navigate} from 'react-router-dom';
 import icon from '../../images/icon-profile.svg';
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import Navigation from "../Navigation/Navigation";
@@ -24,12 +24,13 @@ function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [input, setInput] = useState('');
 	const [movies, setMovies] = useState([]);
-	const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem(`${currentUser._id}filteredMovies`)) || []);
+	const [filteredMovies, setFilteredMovies] = useState([]);
 	const [successIn, setSuccess] = useState(false);
-	const [savedMovies, setSavedMovies] = useState(JSON.parse(localStorage.getItem(`${currentUser._id}savedMovies`)) || []);
+	const [savedMovies, setSavedMovies] = useState([]);
+	const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasError, setHasError] = useState(false)
-	const [isShortMovie, setIsShortMovie] = useState(localStorage.getItem(`${currentUser._id}isShortMovie`) === 'true');
+	const [isShortMovie, setIsShortMovie] = useState(false);
 	const navigate = useNavigate();
 
 	const handlePopupOpenClick = () => {
@@ -41,13 +42,18 @@ function App() {
 
 	useEffect(() => {
 		handleTokenCheck();
+		setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
+		setSavedMovies(JSON.parse(localStorage.getItem("savedMovies")) || []);
+		setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
 	}, [loggedIn])
 
 	useEffect(() => {
 		if (location.pathname === '/movies') {
-			localStorage.setItem(`${currentUser._id}filteredMovies`, JSON.stringify(filteredMovies));
+			localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
+		} else if (location.pathname === '/saved-movies') {
+			localStorage.setItem("filteredSavedMovies", JSON.stringify(filteredSavedMovies));
 		}
-	}, [filteredMovies])
+	}, [filteredMovies, filteredSavedMovies])
 
 	function handleTokenCheck() {
 		let jwt = localStorage.getItem('token');
@@ -127,9 +133,9 @@ function App() {
 		if (location.pathname === '/movies') {
 			setFilteredMovies(filterMovies(movies, status));
 		} else if (location.pathname === '/saved-movies') {
-			setSavedMovies(filterMovies(movies, status))
+			setFilteredSavedMovies(filterMovies(savedMovies, status))
 		}
-		localStorage.setItem(`${currentUser._id}isShortMovie`, status)
+		localStorage.setItem("isShortMovie", status)
 	}
 
 	function handleGetMovieList(input) {
@@ -152,8 +158,9 @@ function App() {
 		let jwt = localStorage.getItem('token');
 		mainApi.getSavedMovies(jwt)
 			.then((res) => {
-				setSavedMovies(filterMovies(res, isShortMovie))
-				localStorage.setItem(`${currentUser._id}savedMovies`, JSON.stringify(savedMovies))
+				setSavedMovies(res)
+				setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
+				localStorage.setItem("savedMovies", JSON.stringify(savedMovies))
 			})
 			.catch(err => console.log(err))
 	}
@@ -164,7 +171,7 @@ function App() {
 			.then((res) => {
 				const newMovieList = [...savedMovies, {...res.data, id: res.data.movieId}]
 				setSavedMovies(newMovieList);
-				localStorage.setItem(`${currentUser._id}savedMovies`, JSON.stringify(newMovieList));
+				localStorage.setItem("savedMovies", JSON.stringify(newMovieList));
 			})
 			.catch(err => console.log(err))
 	}
@@ -177,7 +184,7 @@ function App() {
 					return savedMovie._id !== savedMovieId
 				});
 				setSavedMovies(newMovieList);
-				localStorage.setItem(`${currentUser._id}savedMovies`, JSON.stringify(newMovieList));
+				localStorage.setItem("savedMovies", JSON.stringify(newMovieList));
 			})
 			.catch(err => console.log(err))
 	}
@@ -188,7 +195,7 @@ function App() {
 				<Routes>
 					<Route path="/signup" element={
 						!loggedIn ? <Register handleRegister={handleRegister}/> : <Navigate to='/movies' replace/>
-					}/>,,
+					}/>
 					<Route path="/signin" element={
 						!loggedIn ? <Login handleLogin={handleLogin}/> : <Navigate to='/movies' replace/>
 					}/>
@@ -265,7 +272,7 @@ function App() {
 								isLoading={isLoading}
 								getSavedMovieList={handleGetSavedMovies}
 								onMovieDelete={handleMovieLikeRemove}
-								filteredMovies={filteredMovies}
+								filteredSavedMovies={filteredSavedMovies}
 								setIsLoading={setIsLoading}
 								input={input}
 								setInput={setInput}

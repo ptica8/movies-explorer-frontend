@@ -25,14 +25,13 @@ export default function Movies(props) {
 		}
 	}
 
-	window.addEventListener('resize', () => {
-		let timeout;
-		clearTimeout(timeout)
-		timeout = setTimeout(totalQuantityWindowWidth, 2000)
-	})
-
 	useEffect(() => {
-		totalQuantityWindowWidth()
+		totalQuantityWindowWidth();
+		window.addEventListener('resize', () => {
+			let timeout;
+			clearTimeout(timeout)
+			timeout = setTimeout(totalQuantityWindowWidth, 250)
+		})
 	}, [])
 
 	return (

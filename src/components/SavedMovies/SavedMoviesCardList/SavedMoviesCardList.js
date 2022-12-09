@@ -1,6 +1,5 @@
 import MoviesCardList from '../../Movies/MoviesCardList/MoviesCardList';
 import MoviesCard from "../../Movies/MoviesCard/MoviesCard";
-import {apiLink} from "../../../constants/constants";
 
 export default function SavedMoviesCardList(props) {
 
@@ -10,10 +9,10 @@ export default function SavedMoviesCardList(props) {
 			displayedCards={props.displayedCards}
 			setDisplayedCards={props.setDisplayedCards}
 			cardsInRow={props.cardsInRow}
-			filteredMovies={props.filteredMovies}
+			filteredMovies={props.filteredSavedMovies}
 			getSavedMovieList={props.getSavedMovieList}
 		>
-			{props.savedMovies.map((movie) => (
+			{props.filteredSavedMovies.map((movie) => (
 				<MoviesCard
 					imageUrl={movie.image}
 					nameRu={movie.nameRU}
