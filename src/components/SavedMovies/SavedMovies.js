@@ -5,7 +5,7 @@ import {useEffect} from "react";
 
 export default function SavedMovies(props) {
 	useEffect(() => {
-		props.getSavedMovieList()
+		props.getSavedMovieList();
 	}, [])
 
 	return (

@@ -43,17 +43,20 @@ function App() {
 	useEffect(() => {
 		handleTokenCheck();
 		setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
-		setSavedMovies(JSON.parse(localStorage.getItem("savedMovies")) || []);
+		setInput(localStorage.getItem("input"));
 		setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
 	}, [loggedIn])
 
 	useEffect(() => {
 		if (location.pathname === '/movies') {
 			localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
-		} else if (location.pathname === '/saved-movies') {
-			localStorage.setItem("filteredSavedMovies", JSON.stringify(filteredSavedMovies));
+			localStorage.setItem('input', input)
 		}
-	}, [filteredMovies, filteredSavedMovies])
+	}, [filteredMovies])
+
+	useEffect(() => {
+		setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie));
+	}, [savedMovies])
 
 	function handleTokenCheck() {
 		let jwt = localStorage.getItem('token');
@@ -76,7 +79,7 @@ function App() {
 		mainApi.register(name, email, password)
 			.then(() => {
 				setSuccess(true);
-				navigate('/signin');
+				navigate('/movies');
 			})
 			.catch(() => {
 				setSuccess(false);
@@ -157,13 +160,15 @@ function App() {
 
 	function handleGetSavedMovies() {
 		let jwt = localStorage.getItem('token');
-		mainApi.getSavedMovies(jwt)
-			.then((res) => {
-				setSavedMovies(res)
-				setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
-				localStorage.setItem("savedMovies", JSON.stringify(savedMovies))
-			})
-			.catch(err => console.log(err))
+		if (savedMovies.length === 0) {
+			mainApi.getSavedMovies(jwt)
+				.then((res) => {
+					setSavedMovies(res)
+					setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
+				})
+				.catch(err => console.log(err))
+
+		}
 	}
 
 	function handleMovieLikeToSaved(movie) {
@@ -172,7 +177,6 @@ function App() {
 			.then((res) => {
 				const newMovieList = [...savedMovies, {...res.data, id: res.data.movieId}]
 				setSavedMovies(newMovieList);
-				localStorage.setItem("savedMovies", JSON.stringify(newMovieList));
 			})
 			.catch(err => console.log(err))
 	}
@@ -185,7 +189,6 @@ function App() {
 					return savedMovie._id !== savedMovieId
 				});
 				setSavedMovies(newMovieList);
-				localStorage.setItem("savedMovies", JSON.stringify(newMovieList));
 			})
 			.catch(err => console.log(err))
 	}

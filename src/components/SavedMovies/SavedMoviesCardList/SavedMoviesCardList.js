@@ -2,7 +2,7 @@ import MoviesCardList from '../../Movies/MoviesCardList/MoviesCardList';
 import MoviesCard from "../../Movies/MoviesCard/MoviesCard";
 
 export default function SavedMoviesCardList(props) {
-
+	console.log('filteredSavedMovies:', props.filteredSavedMovies)
 	return (
 		<MoviesCardList
 			btnVisible={'container-btn__hide'}
