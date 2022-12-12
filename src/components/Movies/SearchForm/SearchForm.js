@@ -31,14 +31,24 @@ export default function SearchForm(props) {
 		<section className="searchForm">
 			<div className="searchContainer">
 				<form className="searchContainer__find" onSubmit={handleSubmit}>
-					<input className="searchContainer__find-input" type="text" required
-						   placeholder={emptySearchFinder ? emptySearchFinder : 'Фильм'}
-						   minLength="1" onChange={handleInputChange}></input>
+					<input
+						value={props.input}
+						type="text"
+						required
+						minLength="1"
+						placeholder={emptySearchFinder ? emptySearchFinder : 'Фильм'}
+						className="searchContainer__find-input"
+						onChange={handleInputChange}
+					/>
 					<button className="searchContainer-btn" type="submit" onSubmit={handleSubmit}>Найти</button>
 				</form>
 				<div className="searchContainer__filter">
-					<input className="searchContainer__filter-input" type={'checkbox'} checked={props.isShortMovie}
-						   onChange={handleCheckboxChange}></input>
+					<input
+						checked={props.isShortMovie}
+						type={'checkbox'}
+						className="searchContainer__filter-input"
+						onChange={handleCheckboxChange}
+					/>
 					<label className="searchContainer__filter-name">Короткометражки</label>
 				</div>
 			</div>

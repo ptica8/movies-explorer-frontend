@@ -12,6 +12,12 @@ export default function Movies(props) {
 	const [displayedCards, setDisplayedCards] = useState(0);
 	const [cardsInRow, setCardsInRow] = useState(0);
 
+	useEffect(() => {
+		props.setInput(localStorage.getItem("input"));
+		props.setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
+		props.setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
+	}, [])
+
 	function totalQuantityWindowWidth() {
 		if (window.innerWidth >= 1280) {
 			setDisplayedCards(12);

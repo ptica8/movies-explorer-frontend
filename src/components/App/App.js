@@ -42,9 +42,6 @@ function App() {
 
 	useEffect(() => {
 		handleTokenCheck();
-		setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
-		setInput(localStorage.getItem("input"));
-		setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
 	}, [loggedIn])
 
 	useEffect(() => {
@@ -52,7 +49,7 @@ function App() {
 			localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
 			localStorage.setItem('input', input)
 		}
-	}, [filteredMovies])
+	}, [filteredMovies, input])
 
 	useEffect(() => {
 		setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie));
@@ -160,6 +157,8 @@ function App() {
 
 	function handleGetSavedMovies() {
 		let jwt = localStorage.getItem('token');
+		setInput('')
+		setIsShortMovie(false);
 		if (savedMovies.length === 0) {
 			mainApi.getSavedMovies(jwt)
 				.then((res) => {
