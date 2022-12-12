@@ -52,7 +52,7 @@ function App() {
 	}, [filteredMovies, input])
 
 	useEffect(() => {
-		setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie));
+		setFilteredSavedMovies(filterMovies(savedMovies));
 	}, [savedMovies])
 
 	function handleTokenCheck() {
@@ -94,6 +94,7 @@ function App() {
 					setLoggedIn(true);
 					setSuccess(true);
 					navigate('/movies');
+					window.location.reload();
 				}
 			})
 			.catch(() => {
@@ -119,7 +120,6 @@ function App() {
 
 	function handleLogOut() {
 		setLoggedIn(false);
-		localStorage.removeItem('token');
 		localStorage.clear();
 		setCurrentUser({name: '', email: '', _id: ''})
 		navigate('/');
