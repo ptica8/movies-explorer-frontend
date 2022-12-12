@@ -219,8 +219,43 @@ function App() {
 					<Route path="/" element={
 						<>
 							<Header location={location.pathname}>
-								<Link to="/signup" className="header__btn header__btn-registration">Регистрация</Link>
-								<Link to="/signin" className="header__btn header__btn-login">Войти</Link>
+								{!loggedIn ?
+									<>
+										<Link
+											to="/signup"
+											className="header__btn header__btn-registration"
+										>
+											Регистрация
+										</Link>
+										<Link
+											to="/signin"
+											className="header__btn header__btn-login"
+										>
+											Войти
+										</Link>
+									</> :
+									<>
+										<Link
+											to="/movies"
+											className="header__btn header__btn-films"
+										>
+											Фильмы
+										</Link>
+										<Link
+											to="/saved-movies"
+											className="header__btn header__btn-saved"
+										>
+											Сохраненные фильмы
+										</Link>
+										<Link
+											to="/profile"
+											className="header__btn header__btn-profile"
+										>
+											Аккаунт
+											<img src={icon} className="header__icon-profile" alt="Icon"/>
+										</Link>
+									</>
+								}
 							</Header>
 							<Main/>
 							<Footer/>
