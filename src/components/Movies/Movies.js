@@ -13,7 +13,7 @@ export default function Movies(props) {
 	const [cardsInRow, setCardsInRow] = useState(0);
 
 	useEffect(() => {
-		props.setInput(localStorage.getItem("input"));
+		props.setInput(localStorage.getItem("input") || '');
 		props.setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
 		props.setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
 	}, [])

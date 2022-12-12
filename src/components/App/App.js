@@ -68,6 +68,9 @@ function App() {
 				.catch(err => {
 					console.log(err);
 					setLoggedIn(false);
+					localStorage.clear();
+					window.location.reload();
+					navigate('/');
 				});
 		}
 	}
@@ -76,7 +79,7 @@ function App() {
 		mainApi.register(name, email, password)
 			.then(() => {
 				setSuccess(true);
-				navigate('/movies');
+				handleLogin(email, password);
 			})
 			.catch(() => {
 				setSuccess(false);
@@ -108,7 +111,10 @@ function App() {
 					email: data.email,
 				})
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				console.log(err)
+				handleTokenCheck();
+			})
 	}
 
 	function handleLogOut() {
@@ -165,8 +171,10 @@ function App() {
 					setSavedMovies(res)
 					setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
 				})
-				.catch(err => console.log(err))
-
+				.catch(err => {
+					console.log(err)
+					handleTokenCheck();
+				})
 		}
 	}
 
@@ -177,7 +185,10 @@ function App() {
 				const newMovieList = [...savedMovies, {...res.data, id: res.data.movieId}]
 				setSavedMovies(newMovieList);
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				console.log(err)
+				handleTokenCheck()
+			})
 	}
 
 	function handleMovieLikeRemove(savedMovieId) {
@@ -189,7 +200,10 @@ function App() {
 				});
 				setSavedMovies(newMovieList);
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				console.log(err)
+				handleTokenCheck();
+			})
 	}
 
 	return (
