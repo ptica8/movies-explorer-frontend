@@ -29,6 +29,7 @@ export default function SavedMovies(props) {
 				savedMovies={props.savedMovies}
 				onMovieDelete={props.onMovieDelete}
 				isLoading={props.isLoading}
+				movies={props.movies}
 			/>
 		</section>
 	)

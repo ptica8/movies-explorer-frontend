@@ -90,11 +90,11 @@ function App() {
 		mainApi.authorize(email, password)
 			.then(res => {
 				if (res.token) {
+					setSavedMovies([]);
 					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
 					setSuccess(true);
 					navigate('/movies');
-					window.location.reload();
 				}
 			})
 			.catch(() => {
@@ -246,6 +246,7 @@ function App() {
 							<ProtectedRoute
 								path="/movies"
 								component={Movies}
+								movies={movies}
 								filteredMovies={filteredMovies}
 								savedMovies={savedMovies}
 								isLoading={isLoading}
@@ -285,6 +286,7 @@ function App() {
 							<ProtectedRoute
 								path="/saved-movies"
 								component={SavedMovies}
+								movies={movies}
 								savedMovies={savedMovies}
 								isLoading={isLoading}
 								getSavedMovieList={handleGetSavedMovies}

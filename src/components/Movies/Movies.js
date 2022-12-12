@@ -57,6 +57,7 @@ export default function Movies(props) {
 				isLoading={props.isLoading}
 				filteredMovies={props.filteredMovies}
 				hasError={props.hasError}
+				movies={props.movies}
 				displayedCards={displayedCards}
 				cardsInRow={cardsInRow}
 				setDisplayedCards={setDisplayedCards}
