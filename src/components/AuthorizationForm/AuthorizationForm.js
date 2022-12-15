@@ -1,11 +1,12 @@
 import './AuthorizationForm.css';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {useFormWithValidation} from '../../useFormWithValidation';
 
-export default function AuthorizationForm({handleRegister, handleLogin, ...props}) {
-	const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
+export default function AuthorizationForm({handleRegister, handleLogin, message, ...props}) {
+	const {values, handleChange, errors, isValid, setIsValid, resetForm} = useFormWithValidation();
 	const location = useLocation();
+	const [activeMessage, setActiveMessage] = useState('');
 
 	const handleValueChange = (e) => {
 		handleChange(e);
@@ -22,6 +23,16 @@ export default function AuthorizationForm({handleRegister, handleLogin, ...props
 		const {email, password} = values;
 		handleLogin(email, password);
 	}
+
+	useEffect(() => {
+		if (message) {
+			setActiveMessage(message)
+		}
+	}, [message])
+
+	useEffect(() => {
+		setActiveMessage('');
+	}, [location]);
 
 	return (
 		<div className="form">
@@ -89,7 +100,9 @@ export default function AuthorizationForm({handleRegister, handleLogin, ...props
 							onChange={handleValueChange}
 							autoComplete="current-password"
 						/>
-						<span className={`form__input-error input-password-error`}>{errors.password || ''}</span>
+						<span className={`form__input-error input-password-error`}>
+							{errors.password || activeMessage || ''}
+						</span>
 					</div>
 					<div>
 						<button type="submit" className={`form__button form__button_type_${props.nameForm}`}

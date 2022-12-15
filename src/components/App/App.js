@@ -16,6 +16,12 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import {CurrentUserContext} from '../../context/CurrentUserContext';
 import {mainApi} from '../../utils/MainApi';
 import MoviesApi from "../../utils/MoviesApi";
+import {
+	AUTHORIZATION_ERROR_MESSAGE,
+	EXISTING_EMAIL_ERROR_MESSAGE, INCORRECT_EMAIL_PASSWORD_DATA_ERROR_MESSAGE, INVALID_LOGIN_DATA_ERROR_MESSAGE,
+	REGISTER_ERROR_MESSAGE, SERVER_ERROR_MESSAGE, UPDATE_FAILED_ERROR_MESSAGE,
+	UPDATE_USER_SUCCESS_MESSAGE
+} from "../../constants/constants";
 
 function App() {
 	const location = useLocation();
@@ -31,6 +37,7 @@ function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasError, setHasError] = useState(false)
 	const [isShortMovie, setIsShortMovie] = useState(false);
+	const [message, setMessage] = useState('');
 	const navigate = useNavigate();
 
 	const handlePopupOpenClick = () => {
@@ -78,11 +85,17 @@ function App() {
 	function handleRegister(name, email, password) {
 		mainApi.register(name, email, password)
 			.then(() => {
-				setSuccess(true);
-				handleLogin(email, password);
+				setMessage('');
+				setSuccess(true); //handleTokenCheck()
+				handleLogin(email, password); // return <Navigate to /movies replace>
 			})
-			.catch(() => {
+			.catch((err) => {
 				setSuccess(false);
+				if (err === 'Ошибка 409') {
+					setMessage(EXISTING_EMAIL_ERROR_MESSAGE)
+				} else {
+					setMessage(REGISTER_ERROR_MESSAGE)
+				}
 			})
 	}
 
@@ -90,16 +103,26 @@ function App() {
 		mainApi.authorize(email, password)
 			.then(res => {
 				if (res.token) {
-					setSavedMovies([]);
+					setMessage('');
+					setSavedMovies([]); // handleTokenCheck()
 					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
 					setSuccess(true);
 					navigate('/movies');
 				}
 			})
-			.catch(() => {
+			.catch((err) => {
 				setSuccess(false);
 				setLoggedIn(false);
+				if (err === 'Ошибка 400') {
+					setMessage(INVALID_LOGIN_DATA_ERROR_MESSAGE)
+				} else if (err === 'Ошибка 401') {
+					setMessage(INCORRECT_EMAIL_PASSWORD_DATA_ERROR_MESSAGE)
+				} else if (err === 'Ошибка 500') {
+					setMessage(SERVER_ERROR_MESSAGE)
+				} else {
+					setMessage(AUTHORIZATION_ERROR_MESSAGE)
+				}
 			})
 	}
 
@@ -107,14 +130,20 @@ function App() {
 		let jwt = localStorage.getItem('token');
 		mainApi.editProfileInfo(data, jwt)
 			.then(() => {
+				setMessage('');
 				setCurrentUser({
 					name: data.name,
 					email: data.email,
-				})
+				});
+				setMessage(UPDATE_USER_SUCCESS_MESSAGE)
 			})
 			.catch(err => {
-				console.log(err)
 				handleTokenCheck();
+				if (err === 'Ошибка 409') {
+					setMessage(EXISTING_EMAIL_ERROR_MESSAGE)
+				} else {
+					setMessage(UPDATE_FAILED_ERROR_MESSAGE)
+				}
 			})
 	}
 
@@ -211,10 +240,12 @@ function App() {
 			<div className="App">
 				<Routes>
 					<Route path="/signup" element={
-						!loggedIn ? <Register handleRegister={handleRegister}/> : <Navigate to='/movies' replace/>
+						!loggedIn ? <Register handleRegister={handleRegister} message={message}/> :
+							<Navigate to='/movies' replace/>
 					}/>
 					<Route path="/signin" element={
-						!loggedIn ? <Login handleLogin={handleLogin}/> : <Navigate to='/movies' replace/>
+						!loggedIn ? <Login handleLogin={handleLogin} message={message}/> :
+							<Navigate to='/movies' replace/>
 					}/>
 					<Route path="/" element={
 						<>
@@ -359,6 +390,7 @@ function App() {
 							<ProtectedRoute
 								path="/profile"
 								component={Profile}
+								message={message}
 								title="Привет"
 								onUpdateUser={handleUpdateUser}
 								onLogOut={handleLogOut}
