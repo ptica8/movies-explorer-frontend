@@ -400,6 +400,7 @@ function App() {
 								path="/profile"
 								component={Profile}
 								message={message}
+								setMessage={setMessage}
 								title="Привет"
 								onUpdateUser={handleUpdateUser}
 								onLogOut={handleLogOut}

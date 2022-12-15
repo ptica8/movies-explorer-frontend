@@ -7,18 +7,13 @@ export default function Profile(props) {
 	const currentUser = useContext(CurrentUserContext);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [activeMessage, setActiveMessage] = useState('');
 	const isButtonDisabled = currentUser.name === name && currentUser.email === email;
-	const messageClassName = activeMessage === UPDATE_USER_SUCCESS_MESSAGE ? "profile__edit_success-message" : "form__input-error";
+	const messageClassName = props.message === UPDATE_USER_SUCCESS_MESSAGE ? "profile__edit_success-message" : "form__input-error";
 
 	useEffect(() => {
 		setName(currentUser.name);
 		setEmail(currentUser.email);
 	}, [currentUser]);
-
-	useEffect(() => {
-		setActiveMessage(props.message);
-	}, [props.message]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -29,12 +24,12 @@ export default function Profile(props) {
 
 	const handleNameChange = (e) => {
 		setName(e.target.value);
-		setActiveMessage('');
+		if (props.message) props.setMessage('');
 	}
 
 	const handleEmailChange = (e) => {
 		setEmail(e.target.value);
-		setActiveMessage('');
+		if (props.message) props.setMessage('');
 	}
 
 	return (
@@ -58,7 +53,7 @@ export default function Profile(props) {
 							minLength={2}
 							required=""
 							placeholder="Имя"
-							value={name || ''}
+							value={name}
 							onChange={handleNameChange}
 							autoComplete="name"
 						/>
@@ -75,7 +70,7 @@ export default function Profile(props) {
 							minLength={2}
 							required
 							placeholder="Email"
-							value={email || ''}
+							value={email}
 							onChange={handleEmailChange}
 							autoComplete="email"
 						/>
@@ -83,7 +78,7 @@ export default function Profile(props) {
 				</fieldset>
 				<div className="profile__edit">
 					<span className={messageClassName}>
-						{activeMessage}
+						{props.message}
 					</span>
 					<button type="submit" className="profile__edit_button" onSubmit={handleSubmit}
 							disabled={isButtonDisabled}>
