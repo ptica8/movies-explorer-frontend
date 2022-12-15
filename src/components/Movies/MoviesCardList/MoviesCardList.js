@@ -4,6 +4,9 @@ import {useLocation} from "react-router-dom";
 
 export default function MoviesCardList(props) {
 	const location = useLocation();
+	const isNothingFoundDisplayed = location.pathname === '/movies' || location.pathname === '/saved-movies'
+		? !props.isLoading && !props.filteredMovies.length && !!props.movies?.length
+		: !props.savedMovies?.length
 
 	function handleAddCards() {
 		if (props.displayedCards < props.filteredMovies.length) {
@@ -17,7 +20,7 @@ export default function MoviesCardList(props) {
 				{!props.isLoading && !!props.filteredMovies.length &&
 					<ul className="moviesCardList__container-catalog">{props.children}</ul>}
 				{props.isLoading && <Preloader/>}
-				{!props.isLoading && !props.filteredMovies.length && !!props.movies.length &&
+				{isNothingFoundDisplayed &&
 					<p className="moviesCardList__container_text">Ничего не найдено</p>}
 				{props.hasError &&
 					<p className="moviesCardList__container_text">Во время запроса произошла ошибка. Возможно, проблема

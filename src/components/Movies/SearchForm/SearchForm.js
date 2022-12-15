@@ -1,9 +1,7 @@
 import './SearchForm.css';
-import {useLocation} from "react-router-dom";
 import {useState} from "react";
 
 export default function SearchForm(props) {
-	const location = useLocation();
 	const [emptySearchFinder, setEmptySearchFinder] = useState('')
 
 	function handleSubmit(e) {
@@ -12,7 +10,7 @@ export default function SearchForm(props) {
 			props.getMovieList(props.input);
 			props.totalQuantityWindowWidth();
 		} else if (props.location.pathname === '/saved-movies') {
-			props.getSavedMovieList();
+			props.handleSavedMoviesSearch(props.input, props.isShortMovie);
 		} else {
 			setEmptySearchFinder('Нужно ввести ключевое слово')
 		}

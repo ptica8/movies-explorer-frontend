@@ -16,6 +16,7 @@ export default function Movies(props) {
 		props.setInput(localStorage.getItem("input") || '');
 		props.setIsShortMovie(localStorage.getItem("isShortMovie") === 'true');
 		props.setFilteredMovies(JSON.parse(localStorage.getItem("filteredMovies")) || []);
+		props.getSavedMovieList();
 	}, [])
 
 	function totalQuantityWindowWidth() {

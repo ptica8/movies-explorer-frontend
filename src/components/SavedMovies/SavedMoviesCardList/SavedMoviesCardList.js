@@ -9,8 +9,7 @@ export default function SavedMoviesCardList(props) {
 			setDisplayedCards={props.setDisplayedCards}
 			cardsInRow={props.cardsInRow}
 			filteredMovies={props.filteredSavedMovies}
-			getSavedMovieList={props.getSavedMovieList}
-			movies={props.movies}
+			savedMovies={props.savedMovies}
 		>
 			{props.filteredSavedMovies.map((movie) => (
 				<MoviesCard

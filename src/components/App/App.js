@@ -39,7 +39,6 @@ function App() {
 	const [isShortMovie, setIsShortMovie] = useState(false);
 	const [message, setMessage] = useState('');
 	const navigate = useNavigate();
-
 	const handlePopupOpenClick = () => {
 		setIsOpen(true);
 	}
@@ -55,8 +54,9 @@ function App() {
 		if (location.pathname === '/movies') {
 			localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
 			localStorage.setItem('input', input)
+			localStorage.setItem('isShortMovie', isShortMovie.toString())
 		}
-	}, [filteredMovies, input])
+	}, [filteredMovies, input, isShortMovie])
 
 	useEffect(() => {
 		setFilteredSavedMovies(filterMovies(savedMovies));
@@ -86,8 +86,8 @@ function App() {
 		mainApi.register(name, email, password)
 			.then(() => {
 				setMessage('');
-				setSuccess(true); //handleTokenCheck()
-				handleLogin(email, password); // return <Navigate to /movies replace>
+				setSuccess(true);
+				handleLogin(email, password);
 			})
 			.catch((err) => {
 				setSuccess(false);
@@ -104,7 +104,7 @@ function App() {
 			.then(res => {
 				if (res.token) {
 					setMessage('');
-					setSavedMovies([]); // handleTokenCheck()
+					setSavedMovies([]);
 					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
 					setSuccess(true);
@@ -171,40 +171,48 @@ function App() {
 		} else if (location.pathname === '/saved-movies') {
 			setFilteredSavedMovies(filterMovies(savedMovies, status))
 		}
-		localStorage.setItem("isShortMovie", status)
 	}
 
 	function handleGetMovieList(input) {
-		setIsLoading(true);
 		setHasError(false);
-		MoviesApi()
-			.then((movies) => {
-				setInput(input);
-				setMovies(movies);
-				setFilteredMovies(filterMovies(movies, isShortMovie));
-				setIsLoading(false);
-			})
-			.catch(err => {
-				setHasError(true);
-				console.log(err)
-			});
+		setInput(input);
+		handleTokenCheck();
+		if (movies.length === 0) {
+			setIsLoading(true);
+			MoviesApi()
+				.then((res) => {
+					setMovies(res);
+					setFilteredMovies(filterMovies(res, isShortMovie));
+					setIsLoading(false);
+				})
+				.catch(err => {
+					setHasError(true);
+					console.log(err)
+				});
+		} else {
+			setFilteredMovies(filterMovies(movies, isShortMovie));
+		}
 	}
 
 	function handleGetSavedMovies() {
 		let jwt = localStorage.getItem('token');
 		setInput('')
-		setIsShortMovie(false);
-		if (savedMovies.length === 0) {
-			mainApi.getSavedMovies(jwt)
-				.then((res) => {
-					setSavedMovies(res)
-					setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
-				})
-				.catch(err => {
-					console.log(err)
-					handleTokenCheck();
-				})
-		}
+		setIsShortMovie(false)
+		mainApi.getSavedMovies(jwt)
+			.then((res) => {
+				setSavedMovies(res)
+				setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
+			})
+			.catch(err => {
+				console.log(err)
+				handleTokenCheck();
+			})
+	}
+
+	function handleSavedMoviesSearch(savedMoviesInput, savedMoviesIsShortMovie) {
+		setInput(savedMoviesInput);
+		setIsShortMovie(savedMoviesIsShortMovie);
+		setFilteredSavedMovies(filterMovies(savedMovies, isShortMovie))
 	}
 
 	function handleMovieLikeToSaved(movie) {
@@ -323,6 +331,7 @@ function App() {
 								onMovieLike={handleMovieLikeToSaved}
 								onMovieLikeRemove={handleMovieLikeRemove}
 								getMovieList={handleGetMovieList}
+								getSavedMovieList={handleGetSavedMovies}
 								location={location}
 								isShortMovie={isShortMovie}
 								setIsShortMovie={setIsShortMovie}
@@ -352,10 +361,10 @@ function App() {
 							<ProtectedRoute
 								path="/saved-movies"
 								component={SavedMovies}
-								movies={movies}
 								savedMovies={savedMovies}
 								isLoading={isLoading}
 								getSavedMovieList={handleGetSavedMovies}
+								handleSavedMoviesSearch={handleSavedMoviesSearch}
 								onMovieDelete={handleMovieLikeRemove}
 								filteredSavedMovies={filteredSavedMovies}
 								setIsLoading={setIsLoading}
