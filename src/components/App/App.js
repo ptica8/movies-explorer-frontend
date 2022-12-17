@@ -63,7 +63,7 @@ function App() {
 		if (!localStorage.getItem('input') && !localStorage.getItem('isShortMovie')) return;
 		if (location.pathname === '/saved-movies') return;
 		setInput(localStorage.getItem('input') || '');
-		setIsShortMovie(localStorage.getItem('isShortMovie') === 'true');
+		setIsShortMovie(localStorage.getItem('isShortMovie') === 'true' || false);
 		setFilteredMovies(JSON.parse(localStorage.getItem('filteredMovies')) || []);
 	}, [location]);
 
