@@ -57,10 +57,15 @@ function App() {
 	useEffect(() => {
 		handleTokenCheck();
 		handleGetSavedMovies();
+	}, [])
+
+	useEffect(() => {
+		if (!localStorage.getItem('input') && !localStorage.getItem('isShortMovie')) return;
+		if (location.pathname === '/saved-movies') return;
 		setInput(localStorage.getItem('input') || '');
 		setIsShortMovie(localStorage.getItem('isShortMovie') === 'true');
 		setFilteredMovies(JSON.parse(localStorage.getItem('filteredMovies')) || []);
-	}, [])
+	}, [location]);
 
 	useEffect(() => {
 		setFilteredSavedMovies(filterMovies(savedMovies));
@@ -180,7 +185,6 @@ function App() {
 	function handleGetMovieList(input) {
 		setHasError(false);
 		setInput(input);
-		//setIsShortMovie(isShortMovie)
 		handleTokenCheck();
 		if (movies.length === 0) {
 			setIsLoading(true);
