@@ -28,15 +28,15 @@ function App() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState({name: '', email: '', _id: ''});
 	const [loggedIn, setLoggedIn] = useState(false);
-	const [input, setInput] = useState('');
+	const [input, setInput] = useState(localStorage.getItem('input') || '');
 	const [movies, setMovies] = useState([]);
-	const [filteredMovies, setFilteredMovies] = useState([]);
+	const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
 	const [successIn, setSuccess] = useState(false);
 	const [savedMovies, setSavedMovies] = useState([]);
 	const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasError, setHasError] = useState(false)
-	const [isShortMovie, setIsShortMovie] = useState(false);
+	const [isShortMovie, setIsShortMovie] = useState(localStorage.getItem('isShortMovie') === 'true' || false);
 	const [message, setMessage] = useState('');
 	const navigate = useNavigate();
 	const handlePopupOpenClick = () => {
@@ -47,16 +47,20 @@ function App() {
 	}
 
 	useEffect(() => {
-		handleTokenCheck();
-	}, [loggedIn])
-
-	useEffect(() => {
 		if (location.pathname === '/movies') {
-			localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
+			localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
 			localStorage.setItem('input', input)
 			localStorage.setItem('isShortMovie', isShortMovie.toString())
 		}
 	}, [filteredMovies, input, isShortMovie])
+
+	useEffect(() => {
+		handleTokenCheck();
+		handleGetSavedMovies();
+		setInput(localStorage.getItem('input') || '');
+		setIsShortMovie(localStorage.getItem('isShortMovie') === 'true');
+		setFilteredMovies(JSON.parse(localStorage.getItem('filteredMovies')) || []);
+	}, [])
 
 	useEffect(() => {
 		setFilteredSavedMovies(filterMovies(savedMovies));
@@ -168,7 +172,7 @@ function App() {
 	function onCheckboxChange(status) {
 		if (location.pathname === '/movies') {
 			setFilteredMovies(filterMovies(movies, status));
-		} else if (location.pathname === '/saved-movies') {
+		} else {
 			setFilteredSavedMovies(filterMovies(savedMovies, status))
 		}
 	}
@@ -176,6 +180,7 @@ function App() {
 	function handleGetMovieList(input) {
 		setHasError(false);
 		setInput(input);
+		//setIsShortMovie(isShortMovie)
 		handleTokenCheck();
 		if (movies.length === 0) {
 			setIsLoading(true);
