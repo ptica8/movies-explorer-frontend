@@ -29,7 +29,7 @@ function App() {
 	const [currentUser, setCurrentUser] = useState({name: '', email: '', _id: ''});
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [input, setInput] = useState(localStorage.getItem('input') || '');
-	const [movies, setMovies] = useState([]);
+	const [movies, setMovies] = useState(JSON.parse(localStorage.getItem('movies')) || []);
 	const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
 	const [successIn, setSuccess] = useState(false);
 	const [savedMovies, setSavedMovies] = useState([]);
@@ -54,6 +54,12 @@ function App() {
 	}, [filteredMovies])
 
 	useEffect(() => {
+		if (movies?.length) {
+			localStorage.setItem('movies', JSON.stringify(movies))
+		}
+	}, [movies])
+
+	useEffect(() => {
 		handleTokenCheck();
 		handleGetSavedMovies();
 	}, [])
@@ -72,9 +78,7 @@ function App() {
 
 	useEffect(() => {
 		window.addEventListener("storage", () => {
-			if (localStorage.getItem('token') === null) {
-				handleLogOut();
-			}
+			handleTokenCheck();
 		});
 	}, [])
 
@@ -91,6 +95,7 @@ function App() {
 				.catch(err => {
 					console.log(err);
 					setLoggedIn(false);
+					handleLogOut();
 				});
 		}
 	}
@@ -182,10 +187,16 @@ function App() {
 	const filterMovies = (movies, checkedStatus) => {
 		return movies.filter(movie => filterOnInput(movie, input) && filterOnShortMovieCheckbox(movie, checkedStatus));
 	};
+	const filterOnlyShortMovies = (movies, checkedStatus) => {
+		return movies.filter(movies => filterOnShortMovieCheckbox(movies, checkedStatus));
+	}
 
 	function onCheckboxChange(status) {
 		if (location.pathname === '/movies') {
-			setFilteredMovies(filterMovies(movies, status));
+			status
+				? setFilteredMovies(filterOnlyShortMovies(filterMovies(movies, status), status))
+				: setFilteredMovies(filterMovies(movies, status))
+			localStorage.setItem('isShortMovie', status.toString())
 		} else {
 			setFilteredSavedMovies(filterMovies(savedMovies, status))
 		}
@@ -203,7 +214,6 @@ function App() {
 				setFilteredMovies(filterMovies(res, isShortMovie));
 				setIsLoading(false);
 				localStorage.setItem('input', input)
-				localStorage.setItem('isShortMovie', isShortMovie.toString())
 			})
 			.catch(err => {
 				setHasError(true);
