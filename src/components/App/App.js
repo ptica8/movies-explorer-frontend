@@ -48,11 +48,10 @@ function App() {
 
 	useEffect(() => {
 		if (location.pathname === '/movies') {
+			if (filteredMovies.length === 0) return;
 			localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
-			localStorage.setItem('input', input)
-			localStorage.setItem('isShortMovie', isShortMovie.toString())
 		}
-	}, [filteredMovies, input, isShortMovie])
+	}, [filteredMovies])
 
 	useEffect(() => {
 		handleTokenCheck();
@@ -71,6 +70,14 @@ function App() {
 		setFilteredSavedMovies(filterMovies(savedMovies));
 	}, [savedMovies])
 
+	useEffect(() => {
+		window.addEventListener("storage", () => {
+			if (localStorage.getItem('token') === null) {
+				handleLogOut();
+			}
+		});
+	}, [])
+
 	function handleTokenCheck() {
 		let jwt = localStorage.getItem('token');
 		if (jwt) {
@@ -84,9 +91,6 @@ function App() {
 				.catch(err => {
 					console.log(err);
 					setLoggedIn(false);
-					localStorage.clear();
-					window.location.reload();
-					navigate('/');
 				});
 		}
 	}
@@ -113,11 +117,11 @@ function App() {
 			.then(res => {
 				if (res.token) {
 					setMessage('');
-					setSavedMovies([]);
 					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
 					setSuccess(true);
 					navigate('/movies');
+					handleGetSavedMovies();
 				}
 			})
 			.catch((err) => {
@@ -160,6 +164,11 @@ function App() {
 		setLoggedIn(false);
 		localStorage.clear();
 		setCurrentUser({name: '', email: '', _id: ''})
+		setFilteredMovies([]);
+		setMovies([]);
+		setSavedMovies([]);
+		setInput('');
+		setIsShortMovie('');
 		navigate('/');
 	}
 
@@ -185,22 +194,21 @@ function App() {
 	function handleGetMovieList(input) {
 		setHasError(false);
 		setInput(input);
+		setIsShortMovie(isShortMovie)
 		handleTokenCheck();
-		if (movies.length === 0) {
-			setIsLoading(true);
-			MoviesApi()
-				.then((res) => {
-					setMovies(res);
-					setFilteredMovies(filterMovies(res, isShortMovie));
-					setIsLoading(false);
-				})
-				.catch(err => {
-					setHasError(true);
-					console.log(err)
-				});
-		} else {
-			setFilteredMovies(filterMovies(movies, isShortMovie));
-		}
+		setIsLoading(true);
+		MoviesApi()
+			.then((res) => {
+				setMovies(res);
+				setFilteredMovies(filterMovies(res, isShortMovie));
+				setIsLoading(false);
+				localStorage.setItem('input', input)
+				localStorage.setItem('isShortMovie', isShortMovie.toString())
+			})
+			.catch(err => {
+				setHasError(true);
+				console.log(err)
+			});
 	}
 
 	function handleGetSavedMovies() {
