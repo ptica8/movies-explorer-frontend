@@ -2,141 +2,75 @@ import './Movies.css';
 import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import MoviesCard from "./MoviesCard/MoviesCard";
-import pic1 from '../../images/pic-1.jpg';
-import pic2 from '../../images/pic-2.jpg';
-import pic3 from '../../images/pic-3.jpg';
-import pic4 from '../../images/pic-4.jpg';
-import pic5 from '../../images/pic-5.jpg';
-import pic6 from '../../images/pic-6.jpg';
-import pic7 from '../../images/pic-7.jpg';
-import pic8 from '../../images/pic-8.jpg';
-import pic9 from '../../images/pic-9.jpg';
-import pic10 from '../../images/pic-10.jpg';
-import pic11 from '../../images/pic-11.jpg';
-import pic12 from '../../images/pic-12.jpg';
-import pic13 from '../../images/pic-13.jpg';
-import pic14 from '../../images/pic-14.jpg';
-import pic15 from '../../images/pic-15.jpg';
-import pic16 from '../../images/pic-16.jpg';
+import {useContext, useEffect, useState} from "react";
+import {apiLink} from "../../constants/constants";
+import {CurrentUserContext} from "../../context/CurrentUserContext";
 
-export default function Movies(loggedIn) {
-    return (
-        <section className="movies">
-            <SearchForm loggedIn={loggedIn}/>
-            <MoviesCardList>
-                <MoviesCard
-                    img={pic1}
-                    name="33 слова о дизайне"
-                    title="33 слова о дизайне"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic2}
-                    name="Киноальманах «100 лет дизайна»"
-                    title="Киноальманах «100 лет дизайна»"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic3}
-                    name="В погоне за Бенкси"
-                    title="В погоне за Бенкси"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic4}
-                    name="Баския: Взрыв реальности"
-                    title="Баския: Взрыв реальности"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic5}
-                    name="Бег это свобода"
-                    title="Бег это свобода"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic6}
-                    name="Книготорговцы"
-                    title="Книготорговцы"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic7}
-                    name="Когда я думаю о Германии ночью"
-                    title="Когда я думаю о Германии ночью"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic8}
-                    name="Gimme Danger: История Игги и The Stooges"
-                    title="Gimme Danger: История Игги и The Stooges"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic9}
-                    name="Дженис: Маленькая девочка грустит"
-                    title="Дженис: Маленькая девочка грустит"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic10}
-                    name="Соберись перед прыжком"
-                    title="Соберись перед прыжком"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic11}
-                    name="Пи Джей Харви: A dog called money"
-                    title="Пи Джей Харви: A dog called money"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic12}
-                    name="По волнам: Искусство звука в кино"
-                    title="По волнам: Искусство звука в кино"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic13}
-                    name="Рудбой"
-                    title="Рудбой"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic14}
-                    name="Скейт — кухня"
-                    title="Скейт — кухня"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic15}
-                    name="Война искусств"
-                    title="Война искусств"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-                <MoviesCard
-                    img={pic16}
-                    name="Зона"
-                    title="Зона"
-                    time="1ч 42м"
-                    btnImg={'moviesCard__item-info_like'}
-                />
-            </MoviesCardList>
-        </section>
-    )
+export default function Movies(props) {
+	const currentUser = useContext(CurrentUserContext);
+	const [isLoading, setIsLoading] = useState(false);
+	const [displayedCards, setDisplayedCards] = useState(0);
+	const [cardsInRow, setCardsInRow] = useState(0);
+
+	function totalQuantityWindowWidth() {
+		if (window.innerWidth >= 1280) {
+			setDisplayedCards(12);
+			setCardsInRow(4)
+		} else if (window.innerWidth >= 768) {
+			setDisplayedCards(8);
+			setCardsInRow(2)
+		} else if (window.innerWidth <= 768) {
+			setDisplayedCards(5);
+			setCardsInRow(1)
+		}
+	}
+
+	useEffect(() => {
+		totalQuantityWindowWidth();
+		window.addEventListener('resize', () => {
+			let timeout;
+			clearTimeout(timeout)
+			timeout = setTimeout(totalQuantityWindowWidth, 250)
+		})
+	}, [])
+
+	return (
+		<section className="movies">
+			<SearchForm
+				getMovieList={props.getMovieList}
+				location={props.location}
+				totalQuantityWindowWidth={totalQuantityWindowWidth}
+				setIsLoading={props.setIsLoading}
+				input={props.input}
+				setInput={props.setInput}
+				isShortMovie={props.isShortMovie}
+				setIsShortMovie={props.setIsShortMovie}
+				onCheckboxChange={props.onCheckboxChange}
+			/>
+			<MoviesCardList
+				isLoading={props.isLoading}
+				filteredMovies={props.filteredMovies}
+				hasError={props.hasError}
+				movies={props.movies}
+				displayedCards={displayedCards}
+				cardsInRow={cardsInRow}
+				setDisplayedCards={setDisplayedCards}
+			>
+				{props.filteredMovies.slice(0, displayedCards).map((movie) => (
+					<MoviesCard
+						imageUrl={`${apiLink + movie.image.url}`}
+						nameRu={movie.nameRU}
+						key={movie.id}
+						time={movie.duration}
+						trailerLink={movie.trailerLink}
+						movie={movie}
+						savedMovies={props.savedMovies}
+						onMovieLike={props.onMovieLike}
+						onMovieLikeRemove={props.onMovieLikeRemove}
+						onMovieDelete={props.onMovieDelete}
+					/>
+				))}
+			</MoviesCardList>
+		</section>
+	)
 }

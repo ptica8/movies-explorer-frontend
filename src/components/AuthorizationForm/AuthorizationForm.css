@@ -62,17 +62,11 @@
 }
 
 .form__input-error {
-    visibility: hidden;
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     color: #EE3465;
     margin: 6px 0 10px;
-}
-
-.form__input-error_active {
-    visibility: visible;
-    color: #EE3465;
 }
 
 .form__button {
@@ -86,6 +80,10 @@
     font-size: 14px;
     line-height: 17px;
     text-align: center;
+}
+
+.form__button:disabled {
+    background-color: grey;
 }
 
 .form__button_type_login {
@@ -115,7 +113,7 @@
     text-decoration: none;
 }
 
-.general__signin_link:hover, .form__button:hover {
+.general__signin_link:hover, .form__button:hover:enabled {
     opacity: 0.5;
     cursor: pointer;
     transition: ease-out 0.5s;

@@ -58,6 +58,14 @@
     text-align: center;
 }
 
+.profile__edit_success-message {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: green;
+    margin: 6px 0 10px;
+}
+
 .profile__edit_button {
     border: none;
     background-color: #202020;
@@ -71,12 +79,19 @@
     color: #EE3465;
     text-decoration: none;
     margin-top: 16px;
+    background-color: inherit;
+    border: none;
 }
 
 .profile__edit_button:hover, .profile__edit_exit:hover {
     opacity: 0.5;
     cursor: pointer;
     transition: ease-out 0.5s;
+}
+
+.profile__edit_button:disabled {
+    opacity: 1;
+    color: #8B8B8B;
 }
 
 @media screen and (max-width: 450px) {
