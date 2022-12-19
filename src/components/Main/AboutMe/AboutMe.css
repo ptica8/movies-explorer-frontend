@@ -83,6 +83,7 @@
     .about-me__container-photo {
         width: 255px;
         height: 307px;
+        object-fit: cover;
     }
 
     .social__link_me {
